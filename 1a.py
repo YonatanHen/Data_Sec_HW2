@@ -20,23 +20,31 @@
 # "quotients by the gcd:", (t, s)
 
 
-def extended_gcd(a,b):
-    old_r, r = a,b
-    old_s,s = 1,0
-    old_t,t = 0,1
+def extended_eculidean_gcd(a,b):
+    a0 = a
+    b0 = b
+    t0 = 0
+    t = 1
+    s0 = 1
+    s = 0
+    q = a0 // b0
+    r = a0 - q * b0
+    while r > 0:
+        temp = t0 - q * t
+        t0 = t
+        t = temp
+        temp = s0 - q * s
+        s0 = s
+        s = temp
+        a0 = b0
+        b0 = r
+        q = a0 // b0
+        r = a0 - q * b0
+    r = b0
+    return(r,s,t)
 
-    while r != 0:
+a = 90
+b = 950
+r,s,t = extended_eculidean_gcd(a,b)
 
-        q = old_r // r
-        old_r,r = r, old_r - q * r
-        old_s,s = s, old_s - q * s
-        old_t, t = t, old_t - q * t
-
-    print("gcd({0},{1}) = {2} = {3} * {4} + {5} * {6}".format(a,b,old_r,a,old_s,b,old_t))
-    print("greatest common divisor: {0}".format(old_r))
-    if old_r == 1:
-        print("{0},{1} are co-prime.".format(a,b))
-    else:
-        print("{0},{1} are not co-prime.".format(a, b))
-
-extended_gcd(90,950)
+print("gcd({0},{1}) = {0} * {2} + {1} * {3} = {4}".format(a,b,s,t,r))
