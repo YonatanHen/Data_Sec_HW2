@@ -1,6 +1,48 @@
+from numpy import random
 
-#a
-def extended_eculidean_gcd(a,b):
+# utility functions
+def gcd(x, y):
+    if (y == 0):
+        return x
+    return gcd(y, x % y)
+
+
+def lcm(x, y):
+    return x * y // gcd(x, y)
+
+
+def repetitive_Squaring(num, exp, mod):
+    if exp < 0:
+        return repetitive_Squaring((1 / num) % mod, -exp, mod)
+    elif exp == 0:
+        return 1 % mod
+    elif exp == 1:
+        return num % mod
+    elif exp % 2 == 0:
+        return repetitive_Squaring((num * num) % mod, (exp / 2), mod) % mod
+    else:
+        return (num * repetitive_Squaring((num * num) % mod, (exp - 1) / 2, mod)) % mod
+
+
+# Function return prime number in the given range
+def findPrime(start, end):
+    primes = []
+    flag = True
+    for i in range(start, end):
+        for j in range(2, i//2+1):
+            if i % j == 0 and flag:
+                flag = False
+        if flag:
+            primes.append(i)
+        flag = True
+    print(primes)
+    return random.choice(primes)
+
+
+
+# a
+# Algotihm based on the instructions given in the lesson (taken from course book)
+def extended_eculidean_gcd(a, b):
     a0 = a
     b0 = b
     t0 = 0
@@ -21,42 +63,59 @@ def extended_eculidean_gcd(a,b):
         q = a0 // b0
         r = a0 - q * b0
     r = b0
-    return(r,s,t)
+    return r, s, t
 
 
-#Inverse number
-#b
+# Inverse number
+# b
 def euclidean_gcd(a, b):
     if a == 0:
         return 0, 1
     else:
         t, s = euclidean_gcd(b % a, a)
-        print("s={0} a={1} t={2} b={3}".format(s,a,t,b))
-        return  s - (b // a) * t, t
+        print("s={0} a={1} t={2} b={3}".format(s, a, t, b))
+        return s - (b // a) * t, t
 
 
-#c
+# c
 def keys(L):
-    # find the maximal number that comopsed by the given number of bits
-    num = (2 ** L) - 1
-    ##TODO:continue the function
+    # find p and q in range of 2**L to 2**(L+1) as showed in class (the must to be prime numbers)
+    p = findPrime(2 ** L, 2 ** (L + 1))
+    q = findPrime(2 ** L, 2 ** (L + 1))
 
-key_length = input("Please insert key length:")
+    # calculate n
+    n = p * q
+
+    # find e as prime number in the range of 2**L to 2**(L+1)
+    e = findPrime(2 ** L, 2 ** (L + 1))
+
+    print("Public key: (n, e) = ({0}, {1})".format(n, e))
+
+    lambda_n = lcm(p - 1, q - 1)
+    r, d, t = extended_eculidean_gcd(e, lambda_n)
+
+    print("Private key: (n, e, d) = ({0}, {1}, {2})".format(n, e, d))
+
+    return (n, e), (n, e, d)
 
 
+L = int(input("Please insert key length:"))
 
-print("Insert numbers a,b such that 0<a<b")
-a = int(input("a value:"))
-b = int(input("b value:"))
+private_key, public_key = keys(L)
 
-print("Program will find the inverse number of {0} in Z{1} field by the Extended Euclidean algorithm process.".format(a,b))
+#
+# print("Insert numbers a,b such that 0<a<b")
+# a = int(input("a value:"))
+# b = int(input("b value:"))
+#
+# print("Program will find the inverse number of {0} in Z{1} field by the Extended Euclidean algorithm process.".format(a,b))
+#
+# print("Extended Euclidean algorithm process values:")
+# s,t = euclidean_gcd(b ,a)
+# print("The inverse number for the given a value is:" + str(t))
 
-print("Extended Euclidean algorithm process values:")
-s,t = euclidean_gcd(b ,a)
-print("The inverse number for the given a value is:" + str(t))
 
-
-
-r,s,t = extended_eculidean_gcd(a,b)
-
-print("gcd({0},{1}) = {0} * {2} + {1} * {3} = {4}".format(a,b,s,t,r))
+#
+# r,s,t = extended_eculidean_gcd(a,b)
+#
+# print("gcd({0},{1}) = {0} * {2} + {1} * {3} = {4}".format(a,b,s,t,r))
