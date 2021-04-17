@@ -148,7 +148,7 @@ def RSA_encryption(publicKeyA, publicKeyB, privateKeyA, message):
     return encryptedMessage
 
 
-def RSA_decryption(publicKeyB, privateKeyB, message):
+def RSA_decryption(publicKeyB, privateKeyB, message): 
     n_b = publicKeyB[0]
     e = publicKeyA[1]
     d_b = privateKeyB[2]
