@@ -1,5 +1,6 @@
 from numpy import random
 
+
 # utility functions
 def gcd(x, y):
     if (y == 0):
@@ -40,12 +41,13 @@ def repetitive_Squaring(base, power, mod):
             power = (power - 1) / 2
     return (base * n) % mod
 
+
 # Function return prime number in the given range
 def findPrime(start, end):
     primes = []
     flag = True
     for i in range(start, end):
-        for j in range(2, i//2+1):
+        for j in range(2, i // 2 + 1):
             if i % j == 0 and flag:
                 flag = False
         if flag:
@@ -53,7 +55,6 @@ def findPrime(start, end):
         flag = True
     print(primes)
     return random.choice(primes)
-
 
 
 #################### section a #######################################
@@ -92,7 +93,6 @@ def extended_eculidean_gcd(a, b):
 #         print("s={0} a={1} t={2} b={3}".format(s, a, t, b))
 #         return s - (b // a) * t, t
 def euclidean_gcd(num, mod):
-
     gcd, x, y = extended_eculidean_gcd(num, mod)
 
     if x < 0:
@@ -111,65 +111,61 @@ def keys(L):
     n = p * q
 
     # find e as prime number in the range of 2**L to 2**(L+1)
-    e = findPrime(2 ** L, 2 ** (L + 1))
-
+    # e = findPrime(2 ** L, 2 ** (L + 1))
+    e=65537
     print("Public key: (n, e) = ({0}, {1})".format(n, e))
 
     lambda_n = lcm(p - 1, q - 1)
-    r, d, t = extended_eculidean_gcd(e, lambda_n)
+    r, s, t = extended_eculidean_gcd(e, lambda_n)
+    d=euclidean_gcd(e,lambda_n)
 
     print("Private key: (n, e, d) = ({0}, {1}, {2})".format(n, e, d))
 
     return (n, e), (n, e, d)
 
 
-L = int(input("Please insert key length:"))
+#
+# L = int(input("Please insert key length:"))
+#
+# private_key, public_key = keys(L)
 
-private_key, public_key = keys(L)
 
 #################### section d #######################################
 # Implementation of RSA as we learned in class
-def RSA_encryption(p_a, q_a, p_b, q_b, e, message):
+def RSA_encryption(publicKeyA, publicKeyB, privateKeyA, message):
     print("Encryption:")
-    n_a = p_a * q_a
-    n_b = p_b * q_b
-    phi = (p_a - 1) * (q_a - 1)
-    lam = lcm(p_a - 1, q_a - 1)
-    d_a = euclidean_gcd(e, lam)
+    n_a = publicKeyA[0]
+    e = publicKeyA[1]
+    d_a = privateKeyA[2]
+    n_b = publicKeyB[0]
     encryptedMessage = repetitive_Squaring(message, e, n_b)
     print(f'n={n_a}')
-    print(f'φ(n)={phi}')
-    print(f'λ(n)={lam}')
     print(f'e={e}')
     print(f'd={d_a}')
     print()
     print(f'The encrypted message is: {encryptedMessage}')
     print("-------------------------------")
-    return d_a, n_a, encryptedMessage
+    return encryptedMessage
 
-def RSA_decryption(p_b, q_b, e, message):
-    n_b = p_b * q_b
-    phi = (p_b - 1) * (q_b - 1)
-    lam = lcm(p_b - 1, q_b - 1)
-    d_b = euclidean_gcd(e, lam)
+
+def RSA_decryption(publicKeyB, privateKeyB, message):
+    n_b = publicKeyB[0]
+    e = publicKeyA[1]
+    d_b = privateKeyB[2]
     decryptedMessage = repetitive_Squaring(message, d_b, n_b)
     print("Decryption:")
     print(f'n={n_b}')
-    print(f'φ(n)={phi}')
-    print(f'λ(n)={lam}')
     print(f'e={e}')
     print(f'd={d_b}')
     print()
     print(f'The decrypted message is: {decryptedMessage}')
 
-p_a = 2000303
-q_a = 2000387
-p_b = 2000423
-q_b = 2000807
-e = 65537
-message = 1234567
-d_a, n_a, m = RSA_encryption(p_a, q_a, p_b, q_b, e, message)
-RSA_decryption(p_b, q_b, e, m)
+
+message = 12345
+publicKeyA, privateKeyA = keys(7)
+publicKeyB, privateKeyB = keys(7)
+m = RSA_encryption(publicKeyA,publicKeyB, privateKeyA, message)
+RSA_decryption(publicKeyB, privateKeyB, m)
 
 #
 # print("Insert numbers a,b such that 0<a<b")
