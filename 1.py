@@ -150,7 +150,7 @@ def RSA_encryption(publicKeyA, publicKeyB, privateKeyA, message):
 
 def RSA_decryption(publicKeyB, privateKeyB, message): 
     n_b = publicKeyB[0]
-    e = publicKeyA[1]
+    e = publicKeyB[1]
     d_b = privateKeyB[2]
     decryptedMessage = repetitive_Squaring(message, d_b, n_b)
     print("Decryption:")
