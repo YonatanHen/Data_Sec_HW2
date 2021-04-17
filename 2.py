@@ -32,5 +32,25 @@ def prime(n, k):
         return num, alpha
     return False
 
+# 2.b => The idea is to chose randomly a number x between 1 to p-1, and a public number that will be alpha^x mod p
+def privetAndPublicCreate(p, alpha):
+    priv_k = random.randint(1, p - 1)
+    pub_k = (alpha**priv_k)%p
+    print(f'(*) privat key: {priv_k}')
+    print(f'(*) public key: {pub_k}')
 
-print(prime(3,5))
+    # 2.c => the idea is to get the value y (the privet number of the ohter side, and to bundle it together with
+    # alpha^x, with the formula : alpha^(x*y) mod p
+    def mixedKeys(priv_k_b):
+        return alpha**(priv_k*priv_k_b)%p
+
+    return mixedKeys
+
+res = prime(4, 5)
+print(f'(*) P: {res[0]}.\n(*) Alpha: {res[1]}.')
+
+
+x = privetAndPublicCreate(res[0], res[1])
+print(f'(*) bundled number is: {x(5)}')
+
+
