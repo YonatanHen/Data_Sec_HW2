@@ -1,6 +1,5 @@
 from numpy import random
 
-
 # utility functions
 def gcd(x, y):
     if (y == 0):
@@ -11,18 +10,6 @@ def gcd(x, y):
 def lcm(x, y):
     return x * y // gcd(x, y)
 
-
-# def repetitive_Squaring(num, exp, mod):
-#     if exp < 0:
-#         return repetitive_Squaring((1 / num) % mod, -exp, mod)
-#     elif exp == 0:
-#         return 1 % mod
-#     elif exp == 1:
-#         return num % mod
-#     elif exp % 2 == 0:
-#         return repetitive_Squaring((num * num) % mod, (exp / 2), mod) % mod
-#     else:
-#         return (num * repetitive_Squaring((num * num) % mod, (exp - 1) / 2, mod)) % mod
 
 def repetitive_Squaring(base, power, mod):
     if power == 0:
@@ -58,8 +45,8 @@ def findPrime(start, end):
 
 
 #################### section a #######################################
-# Algotihm based on the instructions given in the lesson (taken from course book)
 def extended_eculidean_gcd(a, b):
+    """Algorithm based on the instructions given in the lesson (taken from course book)"""
     a0 = a
     b0 = b
     t0 = 0
@@ -84,15 +71,8 @@ def extended_eculidean_gcd(a, b):
 
 
 #################### section b #######################################
-# Find inverse number
-# def euclidean_gcd(a, b):
-#     if a == 0:
-#         return 0, 1
-#     else:
-#         t, s = euclidean_gcd(b % a, a)
-#         print("s={0} a={1} t={2} b={3}".format(s, a, t, b))
-#         return s - (b // a) * t, t
 def euclidean_gcd(num, mod):
+    """Eculidean gcd algorithm function"""
     gcd, x, y = extended_eculidean_gcd(num, mod)
 
     if x < 0:
@@ -103,6 +83,7 @@ def euclidean_gcd(num, mod):
 
 #################### section c #######################################
 def keys(L):
+    """Function find the private and the public keys according to the L bytes number which received as parameter"""
     # find p and q in range of 2**L to 2**(L+1) as showed in class (the must to be prime numbers)
     p = findPrime(2 ** L, 2 ** (L + 1))
     q = findPrime(2 ** L, 2 ** (L + 1))
@@ -123,16 +104,9 @@ def keys(L):
 
     return (n, e), (n, e, d)
 
-
-#
-# L = int(input("Please insert key length:"))
-#
-# private_key, public_key = keys(L)
-
-
 #################### section d #######################################
-# Implementation of RSA as we learned in class
 def RSA_encryption(publicKeyA, publicKeyB, privateKeyA, message):
+    """Implementation of RSA as we learned in class"""
     print("Encryption:")
     n_a = publicKeyA[0]
     e = publicKeyA[1]
@@ -148,7 +122,8 @@ def RSA_encryption(publicKeyA, publicKeyB, privateKeyA, message):
     return encryptedMessage
 
 
-def RSA_decryption(publicKeyB, privateKeyB, message): 
+def RSA_decryption(publicKeyB, privateKeyB, message):
+    """The function decrypts the encrypted message"""
     n_b = publicKeyB[0]
     e = publicKeyB[1]
     d_b = privateKeyB[2]
@@ -167,19 +142,3 @@ publicKeyB, privateKeyB = keys(7)
 m = RSA_encryption(publicKeyA,publicKeyB, privateKeyA, message)
 RSA_decryption(publicKeyB, privateKeyB, m)
 
-#
-# print("Insert numbers a,b such that 0<a<b")
-# a = int(input("a value:"))
-# b = int(input("b value:"))
-#
-# print("Program will find the inverse number of {0} in Z{1} field by the Extended Euclidean algorithm process.".format(a,b))
-#
-# print("Extended Euclidean algorithm process values:")
-# s,t = euclidean_gcd(b ,a)
-# print("The inverse number for the given a value is:" + str(t))
-
-
-#
-# r,s,t = extended_eculidean_gcd(a,b)
-#
-# print("gcd({0},{1}) = {0} * {2} + {1} * {3} = {4}".format(a,b,s,t,r))
