@@ -3,16 +3,19 @@ from numpy import random
 
 # utility functions
 def gcd(x, y):
+    """Find gcd of 2 numbers"""
     if (y == 0):
         return x
     return gcd(y, x % y)
 
 
 def lcm(x, y):
+    """Find lcm of 2 numbers"""
     return x * y // gcd(x, y)
 
 
 def repetitive_Squaring(base, power, mod):
+    """Function implements the repetitive squaring algorithm"""
     if power == 0:
         return 1
     n = 1
@@ -30,8 +33,8 @@ def repetitive_Squaring(base, power, mod):
     return (base * n) % mod
 
 
-# Function return prime number in the given range
 def findPrime(start, end):
+    """Function return prime number in the given range"""
     primes = []
     flag = True
     for i in range(start, end):
