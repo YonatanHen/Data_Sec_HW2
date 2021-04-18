@@ -1,5 +1,6 @@
 from numpy import random
 
+
 # utility functions
 def gcd(x, y):
     if (y == 0):
@@ -40,7 +41,6 @@ def findPrime(start, end):
         if flag:
             primes.append(i)
         flag = True
-    print(primes)
     return random.choice(primes)
 
 
@@ -93,16 +93,17 @@ def keys(L):
 
     # find e as prime number in the range of 2**L to 2**(L+1)
     # e = findPrime(2 ** L, 2 ** (L + 1))
-    e=65537
+    e = 65537
     print("Public key: (n, e) = ({0}, {1})".format(n, e))
 
     lambda_n = lcm(p - 1, q - 1)
-    r, s, t = extended_eculidean_gcd(e, lambda_n)
-    d=euclidean_gcd(e,lambda_n)
+
+    d = euclidean_gcd(e, lambda_n)
 
     print("Private key: (n, e, d) = ({0}, {1}, {2})".format(n, e, d))
 
     return (n, e), (n, e, d)
+
 
 #################### section d #######################################
 def RSA_encryption(publicKeyA, publicKeyB, privateKeyA, message):
@@ -137,8 +138,10 @@ def RSA_decryption(publicKeyB, privateKeyB, message):
 
 
 message = 12345
+print("The message is:{0}".format(message))
+print("A keys:")
 publicKeyA, privateKeyA = keys(7)
+print("B keys:")
 publicKeyB, privateKeyB = keys(7)
-m = RSA_encryption(publicKeyA,publicKeyB, privateKeyA, message)
+m = RSA_encryption(publicKeyA, publicKeyB, privateKeyA, message)
 RSA_decryption(publicKeyB, privateKeyB, m)
-
